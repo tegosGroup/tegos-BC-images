@@ -1,0 +1,6 @@
+*.msi
+*.dll
+*.exe
+**/Run/Install/*
+NULL
+.env

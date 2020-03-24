@@ -1,0 +1,8 @@
+*.md
+.git
+*.docx
+*.pdf
+LICENSE
+.gitignore
+build.ps1
+NULL

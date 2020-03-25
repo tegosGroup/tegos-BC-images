@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample
+  labels:
+    app: sample
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: sample
+      labels:
+        app: sample
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": windows
+      containers:
+      - name: sample
+        image: jsheeper/tegos-bc-images:latest
+        env:
+          - name: databaseServer
+            value: ""
+          - name: "databaseInstance"
+            value: ""
+          - name: databaseName
+            value: ""
+          - name: databaseUserName
+            value: ""
+          - name: databasePassword
+            value: ""
+          - name: encryptionSecurePassword
+            value: ""  
+          - name: encryptionKeyURL
+            value: ""
+        resources:
+          limits:
+            cpu: 2
+            memory: 4G
+          requests:
+            cpu: 1
+            memory: 3G
+        ports:
+          - containerPort: 7046
+  selector:
+    matchLabels:
+      app: sample
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 7046
+  selector:
+    app: sample

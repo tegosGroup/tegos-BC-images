@@ -250,11 +250,14 @@ Write-Host "Container Dns Name  : $publicDnsName"
 if ($containerAge -gt 60) {
     Write-Host "WARNING: You are running a container which is $containerAge days old.
 Microsoft recommends that you always run the latest version of our containers."
-    Write-Host
 }
 
-if ("$securepassword") {
-    Clear-Variable -Name "securePassword"
+#if ("$securepassword") {
+#    Clear-Variable -Name "securePassword"
+#}
+
+if ("$env:encryptionSecurePassword") {
+    Clear-Variable -Name "env:encryptionSecurePassword"
 }
 
 $timespend = [Math]::Round([DateTime]::Now.Subtract($startTime).Totalseconds)

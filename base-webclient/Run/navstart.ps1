@@ -122,18 +122,18 @@ $WebClientFolder = (Get-Item "C:\Program Files\Microsoft Dynamics NAV\*\Web Clie
 #    }
 #}
 
-if ($newPublicDnsName) {
+#if ($newPublicDnsName) {
     # Certificate
-    if ($navUseSSL -or $servicesUseSSL) {
-        . (Get-MyFilePath "SetupCertificate.ps1")
-    }
-    #. (Get-MyFilePath "SetupConfiguration.ps1")
+if ($navUseSSL -or $servicesUseSSL) {
+    . (Get-MyFilePath "SetupCertificate.ps1")
 }
-else {
+    #. (Get-MyFilePath "SetupConfiguration.ps1")
+#}
+#else {
     #$CustomConfigFile =  Join-Path $ServiceTierFolder "CustomSettings.config"
     #$CustomConfig = [xml](Get-Content $CustomConfigFile)
     #$publicWebBaseUrl = $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicWebBaseUrl']").Value
-}
+#}
 
 #if (!$restartingInstance) {
 #    . (Get-MyFilePath "SetupAddIns.ps1")

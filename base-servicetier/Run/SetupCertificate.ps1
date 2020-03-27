@@ -16,16 +16,18 @@ Write-Host "Importing Self Signed Certificate"
 #New-SelfSignedCertificateEx -Subject "CN=$publicDnsName" -SubjectAlternativeName @($publicDnsName) -IsCA $true -Exportable -Path $certificatePfxFile -Password $SecurePfxPassword -SignatureAlgorithm sha256 | Out-Null
 
 $certificatePfxFile = Join-Path $runPath "certificate.pfx"
+$certificateCerFile = Join-Path $runPath "certificate.cer"
 
-$certificatePfxPassword = ConvertTo-SecureString -String $env:certificatePfxPassword -AsPlainText -Force
+$certificatePfxPassword = $env:certificatePfxPassword
+$securePfxPassword = ConvertTo-SecureString -String $certificatePfxPassword -AsPlainText -Force
 
-Write-Host "Downloading Encryption Key"
+Write-Host "Downloading Certificate"
 (New-Object System.Net.WebClient).DownloadFile("$env:certificatePfxFileUrl", $certificatePfxFile)
 
 $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($certificatePfxFile, $certificatePfxPassword)
-Export-Certificate -Cert $cert -FilePath $CertificateCerFile | Out-Null
+Export-Certificate -Cert $cert -FilePath $certificateCerFile | Out-Null
 $certificateThumbprint = $cert.Thumbprint
 Write-Host "Self Signed Certificate Thumbprint $certificateThumbprint"
-Import-PfxCertificate -Password $SecurePfxPassword -FilePath $certificatePfxFile -CertStoreLocation "cert:\localMachine\my" | Out-Null
-Import-PfxCertificate -Password $SecurePfxPassword -FilePath $certificatePfxFile -CertStoreLocation "cert:\localMachine\Root" | Out-Null
+Import-PfxCertificate -Password $securePfxPassword -FilePath $certificatePfxFile -CertStoreLocation "cert:\localMachine\my" | Out-Null
+Import-PfxCertificate -Password $securePfxPassword -FilePath $certificatePfxFile -CertStoreLocation "cert:\localMachine\Root" | Out-Null
 #$dnsidentity = $cert.GetNameInfo('SimpleName',$false)

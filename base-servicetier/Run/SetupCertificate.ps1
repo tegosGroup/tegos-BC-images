@@ -8,13 +8,19 @@
 #
 #. (Get-MyFilePath "New-SelfSignedCertificateEx.ps1")
 
-Write-Host "Creating Self Signed Certificate"
+Write-Host "Importing Self Signed Certificate"
 #$certificatePfxFile = Join-Path $runPath "certificate.pfx"
 #$certificateCerFile = Join-Path $runPath "certificate.cer"
 #$certificatePfxPassword = Get-RandomPassword
 #$SecurePfxPassword = ConvertTo-SecureString -String $certificatePfxPassword -AsPlainText -Force
 #New-SelfSignedCertificateEx -Subject "CN=$publicDnsName" -SubjectAlternativeName @($publicDnsName) -IsCA $true -Exportable -Path $certificatePfxFile -Password $SecurePfxPassword -SignatureAlgorithm sha256 | Out-Null
 
+$certificatePfxFile = Join-Path $runPath "certificate.pfx"
+
+$certificatePfxPassword = ConvertTo-SecureString -String $env:certificatePfxPassword -AsPlainText -Force
+
+Write-Host "Downloading Encryption Key"
+(New-Object System.Net.WebClient).DownloadFile("$env:certificatePfxFileUrl", $certificatePfxFile)
 
 $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($certificatePfxFile, $certificatePfxPassword)
 Export-Certificate -Cert $cert -FilePath $CertificateCerFile | Out-Null

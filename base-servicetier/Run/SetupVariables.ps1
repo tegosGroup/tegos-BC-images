@@ -1,5 +1,5 @@
 ﻿$hostname = hostname
-$publicDnsName = "$env:PublicDnsName"
+$publicDnsName = "$env:publicDnsName"
 if ($publicDnsName -eq "") {
     $publicDnsName = $hostname
 }

@@ -113,9 +113,9 @@ if (Test-Path "$serviceTierFolder\Microsoft.Dynamics.Nav.Management.psm1") {
 
 #if ($newPublicDnsName) {
     # Certificate
-#    if ($navUseSSL -or $servicesUseSSL) {
-#        . (Get-MyFilePath "SetupCertificate.ps1")
-#    }
+if ($navUseSSL -or $servicesUseSSL) {
+    . (Get-MyFilePath "SetupCertificate.ps1")
+}
 . (Get-MyFilePath "SetupConfiguration.ps1")
 #}
 #else {

@@ -9,9 +9,11 @@ Write-Host "Host OS Version is $hostOsVersion"
 
 #$baseimage = "mcr.microsoft.com/windows/servercore/insider:$hostOsVersion"
 
-$baseimage = "mcr.microsoft.com/dotnet/framework/runtime:4.8-windowsservercore-1903"
-$isolation = "process"
-$image = "mygeneric"
+#1809
+
+$baseimage = "mcr.microsoft.com/dotnet/framework/runtime:4.8-20190910-windowsservercore-ltsc2019"
+$isolation = "hyperv"
+$image = "mygenericwebclient"
 $genericVersion = "0.0.9.8"
 $created = [DateTime]::Now.ToUniversalTime().ToString("yyyyMMddHHmm") 
 

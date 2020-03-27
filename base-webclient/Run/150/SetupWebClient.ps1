@@ -25,15 +25,15 @@ if (!(Test-Path $NAVWebClientManagementModule)) {
 Import-Module $NAVWebClientManagementModule
 New-NAVWebServerInstance -PublishFolder $publishFolder `
                          -WebServerInstance "$WebServerInstance" `
-                         -Server "localhost" `
-                         -ServerInstance "$ServerInstance" `
+                         -Server "$env:navServer" `
+                         -ServerInstance "$env:navServerInstance" `
                          -ClientServicesCredentialType $Auth `
                          -ClientServicesPort "$clientServicesPort" `
                          -WebSitePort $webClientPort @certparam
 
 $navsettingsFile = Join-Path $wwwRootPath "$WebServerInstance\navsettings.json"
 $config = Get-Content $navSettingsFile | ConvertFrom-Json
-Add-Member -InputObject $config.NAVWebSettings -NotePropertyName "RequireSSL" -NotePropertyValue "true" -ErrorAction SilentlyContinue
+Add-Member -InputObject $config.NAVWebSettings -NotePropertyName "RequireSSL" -NotePropertyValue "false" -ErrorAction SilentlyContinue
 $config.NAVWebSettings.RequireSSL = $false
 Add-Member -InputObject $config.NAVWebSettings -NotePropertyName "PersonalizationEnabled" -NotePropertyValue "true" -ErrorAction SilentlyContinue
 $config.NAVWebSettings.PersonalizationEnabled = $true

@@ -114,18 +114,18 @@ if ($bakfile -ne "") {
 }
 
 $useSSL = "$env:UseSSL"
-if ($auth -eq "Windows") {
-    $navUseSSL = $false
-} else {
+#if ($auth -eq "Windows") {
+#    $navUseSSL = $false
+#} else {
     $navUseSSL = $true
-}
-if ($useSSL -eq "Y") {
-    $servicesUseSSL = $true
-} elseif ($useSSL -eq "N") {
+#}
+#if ($useSSL -eq "Y") {
+#    $servicesUseSSL = $true
+#} elseif ($useSSL -eq "N") {
     $servicesUseSSL = $false
-} else {
-    $servicesUseSSL = $navUseSSL
-}
+#} else {
+#    $servicesUseSSL = $navUseSSL
+#}
 if ($servicesUseSSL) {
     $protocol = "https://"
     $webClientPort = 443

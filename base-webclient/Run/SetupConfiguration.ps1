@@ -10,42 +10,42 @@
 # OUTPUT
 #
 
-Write-Host "Modifying Service Tier Config File with Instance Specific Settings"
-$CustomConfigFile =  Join-Path $ServiceTierFolder "CustomSettings.config"
-$CustomConfig = [xml](Get-Content $CustomConfigFile)
+#Write-Host "Modifying Service Tier Config File with Instance Specific Settings"
+#$CustomConfigFile =  Join-Path $ServiceTierFolder "CustomSettings.config"
+#$CustomConfig = [xml](Get-Content $CustomConfigFile)
 
-$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value = $databaseServer
-$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseInstance']").Value = $databaseInstance
-$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseName']").Value = "$databaseName"
-$customConfig.SelectSingleNode("//appSettings/add[@key='ServerInstance']").Value = "$serverInstance"
-$customConfig.SelectSingleNode("//appSettings/add[@key='ManagementServicesPort']").Value = "$managementServicesPort"
-$customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesPort']").Value = "$clientServicesPort"
-$customConfig.SelectSingleNode("//appSettings/add[@key='SOAPServicesPort']").Value = "$soapServicesPort"
-$customConfig.SelectSingleNode("//appSettings/add[@key='ODataServicesPort']").Value = "$oDataServicesPort"
-$customConfig.SelectSingleNode("//appSettings/add[@key='DefaultClient']").Value = "Web"
-$customConfig.SelectSingleNode("//appSettings/add[@key='Multitenant']").Value = "$multitenant"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value = $databaseServer
+#$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseInstance']").Value = $databaseInstance
+#$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseName']").Value = "$databaseName"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='ServerInstance']").Value = "$serverInstance"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='ManagementServicesPort']").Value = "$managementServicesPort"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesPort']").Value = "$clientServicesPort"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='SOAPServicesPort']").Value = "$soapServicesPort"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='ODataServicesPort']").Value = "$oDataServicesPort"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='DefaultClient']").Value = "Web"
+#$customConfig.SelectSingleNode("//appSettings/add[@key='Multitenant']").Value = "$multitenant"
 
-$taskSchedulerKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='EnableTaskScheduler']") -ne $null)
-if ($taskSchedulerKeyExists) {
-    $customConfig.SelectSingleNode("//appSettings/add[@key='EnableTaskScheduler']").Value = "false"
-}
+$#taskSchedulerKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='EnableTaskScheduler']") -ne $null)
+#if ($taskSchedulerKeyExists) {
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='EnableTaskScheduler']").Value = "false"
+#}
 
-$developerServicesKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']") -ne $null)
-if ($developerServicesKeyExists) {
-    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']").Value = "$developerServicesPort"
-    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesEnabled']").Value = "true"
-    $CustomConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesSSLEnabled']").Value = $servicesUseSSL.ToString().ToLower()
-}
+#$developerServicesKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']") -ne $null)
+#if ($developerServicesKeyExists) {
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']").Value = "$developerServicesPort"
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesEnabled']").Value = "true"
+#    $CustomConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesSSLEnabled']").Value = $servicesUseSSL.ToString().ToLower()
+#}
 
-$customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesCredentialType']").Value = $auth
-if ($developerServicesKeyExists) {
-    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/"
-} else {
-    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/WebClient/"
-}
-if ($WebClient -ne "N") {
-    $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicWebBaseUrl']").Value = $publicWebBaseUrl
-}
+#$customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesCredentialType']").Value = $auth
+#if ($developerServicesKeyExists) {
+#    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/"
+#} else {
+#    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/WebClient/"
+#}
+#if ($WebClient -ne "N") {
+#    $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicWebBaseUrl']").Value = $publicWebBaseUrl
+#}
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicSOAPBaseUrl']").Value = "$protocol${publicDnsName}:$publicSoapPort/$ServerInstance/WS/"
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicODataBaseUrl']").Value = "$protocol${publicDnsName}:$publicODataPort/$ServerInstance/OData"
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicWinBaseUrl']").Value = "DynamicsNAV://${publicDnsName}:$publicWinClientPort/$ServerInstance/"

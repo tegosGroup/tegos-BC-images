@@ -91,31 +91,31 @@ try {
             }
         }
     
-        if (!(Test-Path "C:\Program Files\Microsoft Dynamics NAV\*\Service\*.exe" -PathType Leaf)) {
+        #if (!(Test-Path "C:\Program Files\Microsoft Dynamics NAV\*\Service\*.exe" -PathType Leaf)) {
     
-            if (Test-Path $navDvdPath -PathType Container) {
-                $setupVersion = (Get-Item -Path "$navDvdPath\ServiceTier\program files\Microsoft Dynamics NAV\*\Service\Microsoft.Dynamics.Nav.Server.exe").VersionInfo.FileVersion
-                $versionNo = [Int]::Parse($setupVersion.Split('.')[0]+$setupVersion.Split('.')[1])
-                $versionFolder = ""
-                Get-ChildItem -Path $PSScriptRoot -Directory | where-object { [Int]::TryParse($_.Name, [ref]$null) } | % { [Int]::Parse($_.Name) } | Sort-Object | % {
-                    if ($_ -le $versionNo) {
-                        $versionFolder = Join-Path $PSScriptRoot "$_"
-                    }
-                }
-                if ($versionFolder -ne "") {
-                    Copy-Item -Path "$versionFolder\*" -Destination $PSScriptRoot -Recurse -Force
-                }
+            #if (Test-Path $navDvdPath -PathType Container) {
+                #$setupVersion = (Get-Item -Path "$navDvdPath\ServiceTier\program files\Microsoft Dynamics NAV\*\Service\Microsoft.Dynamics.Nav.Server.exe").VersionInfo.FileVersion
+                #$versionNo = [Int]::Parse($setupVersion.Split('.')[0]+$setupVersion.Split('.')[1])
+                #$versionFolder = ""
+                #Get-ChildItem -Path $PSScriptRoot -Directory | where-object { [Int]::TryParse($_.Name, [ref]$null) } | % { [Int]::Parse($_.Name) } | Sort-Object | % {
+                #    if ($_ -le $versionNo) {
+                #        $versionFolder = Join-Path $PSScriptRoot "$_"
+                #    }
+                #}
+                #if ($versionFolder -ne "") {
+                #    Copy-Item -Path "$versionFolder\*" -Destination $PSScriptRoot -Recurse -Force
+                #}
     
                 # Remove version specific folders
-                Get-ChildItem -Path $PSScriptRoot -Directory | where-object { [Int]::TryParse($_.Name, [ref]$null) } | % {
-                    Remove-Item (Join-Path $PSScriptRoot $_.Name) -Recurse -Force -ErrorAction Ignore
-                }
+                #Get-ChildItem -Path $PSScriptRoot -Directory | where-object { [Int]::TryParse($_.Name, [ref]$null) } | % {
+                #    Remove-Item (Join-Path $PSScriptRoot $_.Name) -Recurse -Force -ErrorAction Ignore
+                #}
         
-                . (Get-MyFilePath "navinstall.ps1")
-            } else {
-                throw "You must share a DVD folder to $navDvdPath or a file system to $navFSPath in order to run the generic image"
-            }
-        }
+            #    . (Get-MyFilePath "navinstall.ps1")
+            #} else {
+            #    throw "You must share a DVD folder to $navDvdPath or a file system to $navFSPath in order to run the generic image"
+            #}
+        #}
     }
 
     . (Get-MyFilePath "navstart.ps1")

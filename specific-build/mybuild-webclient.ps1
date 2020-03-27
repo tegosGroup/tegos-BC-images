@@ -1,6 +1,6 @@
 ﻿# Json format:
 #
-$baseimage = "mygeneric"
+$baseimage = "mygenericwebclient:latest"
 $platform = "ltsc2019"
 
     $osSuffix = $platform
@@ -38,6 +38,6 @@ $platform = "ltsc2019"
                  --build-arg platform="$($json.platformversion)" `
                  --isolation=$isolation `
                  --memory 10G `
-                 --tag "myservicetier" `
+                 --tag "mywebclient" `
                  $PSScriptRoot
 

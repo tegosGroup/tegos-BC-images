@@ -247,9 +247,11 @@ Microsoft recommends that you always run the latest version of our containers."
 #    Clear-Variable -Name "securePassword"
 #}
 
-if ("$env:encryptionSecurePassword") {
-    Clear-Variable -Name "env:encryptionSecurePassword"
-}
+#TODO
+#if ("$env:encryptionSecurePassword") {
+#    Clear-Variable -Name "env:encryptionSecurePassword"
+#    Clear-Variable -Name "env:PFXPassword"
+#}
 
 $timespend = [Math]::Round([DateTime]::Now.Subtract($startTime).Totalseconds)
 Write-Host "Initialization took $timespend seconds"

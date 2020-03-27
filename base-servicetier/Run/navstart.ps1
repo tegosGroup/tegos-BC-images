@@ -99,15 +99,6 @@ if (Test-Path "$serviceTierFolder\Microsoft.Dynamics.Nav.Management.psm1") {
     Import-Module "$serviceTierFolder\Microsoft.Dynamics.Nav.Management.dll" -wa SilentlyContinue
 }
 
-# Setup Database Connection
-Write-Host "Modifying Business Central Service Tier Config File for Database Connection"
-$CustomConfigFile =  Join-Path $serviceTierFolder "CustomSettings.config"
-$CustomConfig = [xml](Get-Content $CustomConfigFile)
-$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value = $databaseServer
-$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseInstance']").Value = $databaseInstance
-$customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseName']").Value = "$databaseName"
-$CustomConfig.Save($CustomConfigFile)
-
 . (Get-MyFilePath "SetupDatabase.ps1")
 
 #$usingLocalSQLServer = ($databaseServer -eq "localhost")
@@ -125,7 +116,7 @@ $CustomConfig.Save($CustomConfigFile)
 #    if ($navUseSSL -or $servicesUseSSL) {
 #        . (Get-MyFilePath "SetupCertificate.ps1")
 #    }
-#    . (Get-MyFilePath "SetupConfiguration.ps1")
+. (Get-MyFilePath "SetupConfiguration.ps1")
 #}
 #else {
 #    $CustomConfigFile =  Join-Path $ServiceTierFolder "CustomSettings.config"

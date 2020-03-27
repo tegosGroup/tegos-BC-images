@@ -33,7 +33,6 @@ docker build --build-arg baseimage=$baseimage `
              --build-arg osversion="$osversion" `
              --isolation=$isolation `
              --tag $image `
-             --tag $image `
              $PSScriptRoot
 
 if ($LASTEXITCODE -ne 0) {

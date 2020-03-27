@@ -30,22 +30,22 @@ if ($taskSchedulerKeyExists) {
     $customConfig.SelectSingleNode("//appSettings/add[@key='EnableTaskScheduler']").Value = "false"
 }
 
-$developerServicesKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']") -ne $null)
-if ($developerServicesKeyExists) {
-    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']").Value = "$developerServicesPort"
-    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesEnabled']").Value = "true"
-    $CustomConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesSSLEnabled']").Value = $servicesUseSSL.ToString().ToLower()
-}
+#$developerServicesKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']") -ne $null)
+#if ($developerServicesKeyExists) {
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']").Value = "$developerServicesPort"
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesEnabled']").Value = "true"
+#    $CustomConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesSSLEnabled']").Value = $servicesUseSSL.ToString().ToLower()
+#}
 
 $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesCredentialType']").Value = $auth
-if ($developerServicesKeyExists) {
-    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/"
-} else {
-    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/WebClient/"
-}
-if ($WebClient -ne "N") {
-    $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicWebBaseUrl']").Value = $publicWebBaseUrl
-}
+#if ($developerServicesKeyExists) {
+#    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/"
+#} else {
+#    $publicWebBaseUrl = "$protocol$publicDnsName$publicwebClientPort/$WebServerInstance/WebClient/"
+#}
+#if ($WebClient -ne "N") {
+#    $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicWebBaseUrl']").Value = $publicWebBaseUrl
+#}
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicSOAPBaseUrl']").Value = "$protocol${publicDnsName}:$publicSoapPort/$ServerInstance/WS/"
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicODataBaseUrl']").Value = "$protocol${publicDnsName}:$publicODataPort/$ServerInstance/OData"
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='PublicWinBaseUrl']").Value = "DynamicsNAV://${publicDnsName}:$publicWinClientPort/$ServerInstance/"
@@ -57,44 +57,44 @@ if ($navUseSSL) {
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='SOAPServicesSSLEnabled']").Value = $servicesUseSSL.ToString().ToLower()
 $CustomConfig.SelectSingleNode("//appSettings/add[@key='ODataServicesSSLEnabled']").Value = $servicesUseSSL.ToString().ToLower()
 
-$enableSymbolLoadingAtServerStartupKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='EnableSymbolLoadingAtServerStartup']") -ne $null)
-if ($enableSymbolLoadingAtServerStartupKeyExists) {
-    $customConfig.SelectSingleNode("//appSettings/add[@key='EnableSymbolLoadingAtServerStartup']").Value = "$($enableSymbolLoadingAtServerStartup -eq $true)"
-}
+#$enableSymbolLoadingAtServerStartupKeyExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='EnableSymbolLoadingAtServerStartup']") -ne $null)
+#if ($enableSymbolLoadingAtServerStartupKeyExists) {
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='EnableSymbolLoadingAtServerStartup']").Value = "$($enableSymbolLoadingAtServerStartup -eq $true)"
+#}
 
-$apiServicesEnabledExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='ApiServicesEnabled']") -ne $null)
-if (($enableApiServices -ne $null) -and $apiServicesEnabledExists) {
-    $customConfig.SelectSingleNode("//appSettings/add[@key='ApiServicesEnabled']").Value = "$($enableApiServices -eq $true)"
-}
+#$apiServicesEnabledExists = ($customConfig.SelectSingleNode("//appSettings/add[@key='ApiServicesEnabled']") -ne $null)
+#if (($enableApiServices -ne $null) -and $apiServicesEnabledExists) {
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='ApiServicesEnabled']").Value = "$($enableApiServices -eq $true)"
+#}
 
-if ($isBcSandbox) {
-    $customConfig.SelectSingleNode("//appSettings/add[@key='EnableTaskScheduler']").Value = "true"
-    Set-ConfigSetting -customSettings "TenantEnvironmentType=Sandbox" -parentPath "//appSettings" -leafName "add" -customConfig $customConfig -silent
-    Set-ConfigSetting -customSettings "EnableSaasExtensionInstall=true" -parentPath "//appSettings" -leafName "add" -customConfig $customConfig -silent
-}
+#if ($isBcSandbox) {
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='EnableTaskScheduler']").Value = "true"
+#    Set-ConfigSetting -customSettings "TenantEnvironmentType=Sandbox" -parentPath "//appSettings" -leafName "add" -customConfig $customConfig -silent
+#    Set-ConfigSetting -customSettings "EnableSaasExtensionInstall=true" -parentPath "//appSettings" -leafName "add" -customConfig $customConfig -silent
+#}
 
 if ($customNavSettings -ne "") {
     Write-Host "Modifying Service Tier Config File with settings from environment variable"    
     Set-ConfigSetting -customSettings $customNavSettings -parentPath "//appSettings" -leafName "add" -customConfig $CustomConfig
 }
 
-if ($auth -eq "AccessControlService") {
-    if ($appIdUri -eq "") {
-        $appIdUri = "$publicWebBaseUrl"
-    }
-    if ($federationMetadata -eq "") {
-        $federationMetadata = "https://login.windows.net/Common/federationmetadata/2007-06/federationmetadata.xml"
-    }
-    if ($federationLoginEndpoint -eq "") {
-        $federationLoginEndpoint = "https://login.windows.net/Common/wsfed?wa=wsignin1.0%26wtrealm=$appIdUri"
-    }
-
-    $customConfig.SelectSingleNode("//appSettings/add[@key='AppIdUri']").Value = $appIdUri
-    $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesFederationMetadataLocation']").Value = $federationMetadata
-    if ($customConfig.SelectSingleNode("//appSettings/add[@key='WSFederationLoginEndpoint']") -ne $null) {
-        $customConfig.SelectSingleNode("//appSettings/add[@key='WSFederationLoginEndpoint']").Value = $federationLoginEndpoint
-    }
-}
+#if ($auth -eq "AccessControlService") {
+#    if ($appIdUri -eq "") {
+#        $appIdUri = "$publicWebBaseUrl"
+#    }
+#    if ($federationMetadata -eq "") {
+#        $federationMetadata = "https://login.windows.net/Common/federationmetadata/2007-06/federationmetadata.xml"
+#    }
+#    if ($federationLoginEndpoint -eq "") {
+#        $federationLoginEndpoint = "https://login.windows.net/Common/wsfed?wa=wsignin1.0%26wtrealm=$appIdUri"
+#    }
+#
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='AppIdUri']").Value = $appIdUri
+#    $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesFederationMetadataLocation']").Value = $federationMetadata
+#    if ($customConfig.SelectSingleNode("//appSettings/add[@key='WSFederationLoginEndpoint']") -ne $null) {
+#        $customConfig.SelectSingleNode("//appSettings/add[@key='WSFederationLoginEndpoint']").Value = $federationLoginEndpoint
+#    }
+#}
 
 $CustomConfig.Save($CustomConfigFile)
 
@@ -109,15 +109,16 @@ if ($navUseSSL) {
     netsh http add urlacl url=https://+:$clientServicesPort/$ServerInstance user="NT AUTHORITY\SYSTEM" | Out-Null
     netsh http add sslcert ipport=0.0.0.0:$clientServicesPort certhash=$certificateThumbprint appid="{00112233-4455-6677-8899-AABBCCDDEEFF}" | Out-Null
 } else {
+    Write-Host "Configuring http"
     netsh http add urlacl url=http://+:$clientServicesPort/$ServerInstance user="NT AUTHORITY\SYSTEM" | Out-Null
 }
 
-if ($developerServicesKeyExists) {
-    $serverConfigFile = Join-Path $ServiceTierFolder "Microsoft.Dynamics.Nav.Server.exe.config"
-    $serverConfig = [xml](Get-Content -Path $serverConfigFile)
-    $legacySecurityPolicyNode = $serverConfig.SelectSingleNode("//configuration/runtime/NetFx40_LegacySecurityPolicy")
-    if ($legacySecurityPolicyNode) {
-        $legacySecurityPolicyNode.enabled = "false"
-    }
-    $serverConfig.Save($serverConfigFile)
-}
+#if ($developerServicesKeyExists) {
+#    $serverConfigFile = Join-Path $ServiceTierFolder "Microsoft.Dynamics.Nav.Server.exe.config"
+#    $serverConfig = [xml](Get-Content -Path $serverConfigFile)
+#    $legacySecurityPolicyNode = $serverConfig.SelectSingleNode("//configuration/runtime/NetFx40_LegacySecurityPolicy")
+#    if ($legacySecurityPolicyNode) {
+#        $legacySecurityPolicyNode.enabled = "false"
+#    }
+#    $serverConfig.Save($serverConfigFile)
+#}

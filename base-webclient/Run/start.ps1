@@ -23,9 +23,9 @@ function Get-MyFilePath([string]$FileName)
     }
 }
 
-if ((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory -lt 3221225472) {
-    throw "At least 3Gb memory needs to be available to the Container."
-}
+#if ((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory -lt 3221225472) {
+#    throw "At least 3Gb memory needs to be available to the Container."
+#}
 
 $Source = @"
 	using System.Net;

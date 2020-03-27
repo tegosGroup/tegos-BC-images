@@ -1,6 +1,6 @@
 version: '2.4'
 services:
-    servicetier-first:
+    servicetierfirst:
         image: "myservicetier"
         environment:
             - databaseServer=${DATABASE_SERVER}
@@ -10,8 +10,11 @@ services:
             - databasePassword=${DATABASE_PASSWORD}
             - encryptionSecurePassword=${ENCRYPTION_SECURE_PASSWORD}
             - encryptionKeyURL=${ENCRYPTION_KEY_URL}
+            - publicDnsName=${PUBLIC_DNS_NAME}
+            - certificatePfxFileUrl=${CERTIFICATE_PFX_FILE_URL}
+            - certificatePfxPassword=${CERTIFICATE_PFX_PASSWORD}
         mem_limit: 4G
-    servicetier-second:
+    servicetiersecond:
         image: "myservicetier"
         environment:
             - databaseServer=${DATABASE_SERVER}
@@ -21,4 +24,17 @@ services:
             - databasePassword=${DATABASE_PASSWORD}
             - encryptionSecurePassword=${ENCRYPTION_SECURE_PASSWORD}
             - encryptionKeyURL=${ENCRYPTION_KEY_URL}
+            - publicDnsName=${PUBLIC_DNS_NAME}
+            - certificatePfxFileUrl=${CERTIFICATE_PFX_FILE_URL}
+            - certificatePfxPassword=${CERTIFICATE_PFX_PASSWORD}
         mem_limit: 4G
+    webclient:
+        image: "mywebclient"
+        environment:
+            - navServer=servicetierfirst
+            - navServerInstance=BC
+            - publicDnsName=${PUBLIC_DNS_NAME}
+            - certificatePfxFileUrl=${CERTIFICATE_PFX_FILE_URL}
+            - certificatePfxPassword=${CERTIFICATE_PFX_PASSWORD}
+        depends_on: 
+            - servicetierfirst
